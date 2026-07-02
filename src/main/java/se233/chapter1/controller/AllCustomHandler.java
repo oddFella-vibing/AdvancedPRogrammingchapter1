@@ -21,7 +21,7 @@ public class AllCustomHandler {
         public void handle(ActionEvent event) {
             Launcher.setEquippedArmor(null);
             Launcher.setEquippedWeapon(null);
-            //Launcher.setInventoryPane();
+            Launcher.setAllEquipments(GenItemList.setUpItemList());
             Launcher.setMainCharacter(GenCharacter.setUpCharacter());
             Launcher.refreshPane();
         }
