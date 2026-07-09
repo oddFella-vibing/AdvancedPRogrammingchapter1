@@ -49,6 +49,7 @@ public class EquipPane extends ScrollPane {
             Launcher.setEquippedArmor(null);
             Launcher.setEquippedWeapon(null);
             Launcher.setAllEquipments(GenItemList.setUpItemList());
+            Launcher.refreshPane();
         });
         if (equippedWeapon != null) {
             weaponLbl = new Label("Weapon: \n" + equippedWeapon.getName());

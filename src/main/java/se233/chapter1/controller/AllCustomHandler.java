@@ -54,18 +54,36 @@ public class AllCustomHandler {
             BasedEquipment retrievedEquipment = (BasedEquipment) dragboard.getContent(
                     BasedEquipment.DATA_FORMAT);
             BasedCharacter character=Launcher.getMainCharacter();
+
+            boolean isBattlemage = character.getClass().getSimpleName().equals("BattleMageCharacter")
+                    || character.getClass().getSimpleName().equals("Battlemage");
+
             if (retrievedEquipment.getClass().getSimpleName().equals("Weapon")) {
-                if (Launcher.getEquippedWeapon()!=null){
-                    allEquipments.add(Launcher.getEquippedWeapon());
+                Weapon weapon = (Weapon) retrievedEquipment;
+
+                // FIX: A Battlemage can equip ANY weapon, everyone else must match the DamageType string
+                if (isBattlemage || weapon.getDamageType().toString().equals(character.getType().toString())) {
+                    if (Launcher.getEquippedWeapon() != null) {
+                        allEquipments.add(Launcher.getEquippedWeapon());
+                    }
+                    Launcher.setEquippedWeapon(weapon);
+                    character.equipWeapon(weapon);
+                } else {
+                    // FIX: If the weapon type matches neither rule, reset it back to the available inventory list
+                    allEquipments.add(retrievedEquipment);
                 }
-                Launcher.setEquippedWeapon((Weapon) retrievedEquipment);
-                character.equipWeapon((Weapon) retrievedEquipment);
             } else {
-                if (Launcher.getEquippedArmor()!=null){
-                    allEquipments.add(Launcher.getEquippedArmor());
+                // FIX: Using proper string comparison, verify they are NOT a Battlemage before equipping Armor
+                if (!isBattlemage) {
+                    if (Launcher.getEquippedArmor() != null) {
+                        allEquipments.add(Launcher.getEquippedArmor());
+                    }
+                    Launcher.setEquippedArmor((Armor) retrievedEquipment);
+                    character.equipArmor((Armor) retrievedEquipment);
+                } else {
+                    // FIX: If a Battlemage tries to wear Armor, reject it and return it back to the available inventory list
+                    allEquipments.add(retrievedEquipment);
                 }
-                Launcher.setEquippedArmor((Armor) retrievedEquipment);
-                character.equipArmor((Armor) retrievedEquipment);
             }
             Launcher.setMainCharacter(character);
             Launcher.setAllEquipments(allEquipments);

@@ -6,6 +6,11 @@ import se233.chapter1.model.item.Weapon;
 
 public class BasedCharacter {
     protected String name, imgpath;
+
+    public void setType(DamageType type) {
+        this.type = type;
+    }
+
     protected DamageType type;
     protected Integer fullHp, basedPow, basedDef, basedRes;
     protected Integer hp, power, defense, resistance;
